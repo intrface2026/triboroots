@@ -181,10 +181,6 @@ export default function LostTrailGate() {
           {t.headline}
         </h1>
 
-        <p className="mt-3 max-w-md text-sm leading-relaxed text-[#2c1d14]/75 sm:text-base">
-          {t.description}
-        </p>
-
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}

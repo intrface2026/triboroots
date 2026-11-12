@@ -198,7 +198,6 @@ export interface GateCopy {
   badge: string;
   headline: string;
   handNote: string;
-  description: string;
   ctaButton: string;
   modalTitle: string;
   modalSubtitle: string;
@@ -226,8 +225,6 @@ export const GATE_COPY: Record<Locale, GateCopy> = {
     badge: "UNDER CONSTRUCTION • OFF THE TRAIL",
     headline: "We're lost on the trail — finding our way back.",
     handNote: "Want an early peek & secret hostel offers?",
-    description:
-      "TriboRoots Hostel is still taking shape. Grab a sneak-peek pass to explore what we've built so far.",
     ctaButton: "lemme see 👀",
     modalTitle: "Claim Your Sneak-Peek Pass",
     modalSubtitle:
@@ -259,8 +256,6 @@ export const GATE_COPY: Record<Locale, GateCopy> = {
     badge: "वेबसाइट निर्माणाधीन • राह ढूँढ रहे हैं",
     headline: "हम अभी रास्ते पर हैं — बहुत जल्द लौटेंगे।",
     handNote: "क्या आप अंदर की शुरुआती झलक देखना चाहते हैं?",
-    description:
-      "ट्राइबरूट्स हॉस्टल अभी आकार ले रहा है। अब तक बनी वेबसाइट देखने के लिए नीचे क्लिक करें।",
     ctaButton: "ज़रा दिखाओ 👀",
     modalTitle: "अपना स्नीक-पीक पास खोलें",
     modalSubtitle:
