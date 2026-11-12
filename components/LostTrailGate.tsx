@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  Compass,
   Sparkles,
   ArrowRight,
   Loader2,
@@ -165,17 +164,29 @@ export default function LostTrailGate() {
 
       {/* Centered Minimal Front Stage */}
       <section className="relative z-10 mx-auto flex flex-1 flex-col items-center justify-center px-5 pb-12 text-center sm:px-8">
-        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d86a34]/35 bg-[#f0e9d7]/80 px-3.5 py-1.5 font-mono text-[11px] font-bold tracking-wider text-[#b85222] shadow-xs backdrop-blur-sm sm:text-xs">
-          <Compass className="h-3.5 w-3.5 animate-spin [animation-duration:12s]" />
-          <span>{t.badge}</span>
-        </div>
-
         <Image
           src={heroLogo}
           alt="TriboRoots Hostel"
           preload
-          className="mb-5 h-auto w-[min(68vw,250px)] object-contain drop-shadow-[0_6px_14px_rgba(44,29,20,0.1)] sm:w-[min(48vw,320px)]"
+          className="mb-6 h-auto w-[min(70vw,260px)] object-contain drop-shadow-[0_6px_14px_rgba(44,29,20,0.1)] sm:w-[min(48vw,340px)]"
         />
+
+        {/* Subtle hand-drawn trail dash */}
+        <svg
+          aria-hidden
+          viewBox="0 0 180 18"
+          className="mb-5 h-4 w-36 text-[#d86a34]/75 sm:w-44"
+        >
+          <path
+            d="M4,10 Q45,2 90,10 T174,8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeDasharray="5 6"
+          />
+          <circle cx="174" cy="8" r="3" fill="currentColor" />
+        </svg>
 
         <h1 className="max-w-xl font-display text-2xl leading-[1.15] font-bold tracking-tight text-[#2c1d14] sm:text-4xl">
           {t.headline}
@@ -184,12 +195,12 @@ export default function LostTrailGate() {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="font-display mt-7 inline-flex cursor-pointer items-center gap-2.5 rounded-full bg-[#2c1d14] px-8 py-4 text-base font-bold tracking-wide text-[#f0e9d7] shadow-[0_16px_34px_-10px_rgba(44,29,20,0.45)] transition-all hover:-translate-y-0.5 hover:bg-[#d86a34] active:scale-95 sm:text-lg"
+          className="font-display mt-8 inline-flex cursor-pointer items-center gap-2.5 rounded-full border-2 border-[#2c1d14] bg-[#2c1d14] px-8 py-4 text-base font-bold tracking-wide text-[#f0e9d7] shadow-[0_5px_0_#d86a34] transition-all hover:-translate-y-0.5 hover:bg-[#b85222] hover:border-[#b85222] hover:shadow-[0_7px_0_#2c1d14] active:translate-y-1 active:shadow-[0_1px_0_#d86a34] sm:text-lg"
         >
           <span>{t.ctaButton}</span>
         </button>
 
-        <p className="mt-4 font-hand text-lg font-semibold text-[#b85222]/90">
+        <p className="mt-5 font-hand text-lg font-semibold text-[#b85222]/90">
           {t.handNote}
         </p>
       </section>

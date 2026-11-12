@@ -195,7 +195,6 @@ export const HERO_COPY: Record<Locale, HeroCopy> = {
 };
 
 export interface GateCopy {
-  badge: string;
   headline: string;
   handNote: string;
   ctaButton: string;
@@ -222,7 +221,6 @@ export interface GateCopy {
 
 export const GATE_COPY: Record<Locale, GateCopy> = {
   en: {
-    badge: "UNDER CONSTRUCTION • OFF THE TRAIL",
     headline: "We're lost on the trail — finding our way back.",
     handNote: "Want an early peek & secret hostel offers?",
     ctaButton: "lemme see 👀",
@@ -253,7 +251,6 @@ export const GATE_COPY: Record<Locale, GateCopy> = {
     serverError: "Could not unlock right now. Please try again in a moment.",
   },
   hi: {
-    badge: "वेबसाइट निर्माणाधीन • राह ढूँढ रहे हैं",
     headline: "हम अभी रास्ते पर हैं — बहुत जल्द लौटेंगे।",
     handNote: "क्या आप अंदर की शुरुआती झलक देखना चाहते हैं?",
     ctaButton: "ज़रा दिखाओ 👀",
