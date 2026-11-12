@@ -193,3 +193,85 @@ export const HERO_COPY: Record<Locale, HeroCopy> = {
     showBooking: "बुकिंग बार दिखाएँ",
   },
 };
+
+export interface GateCopy {
+  badge: string;
+  headline: string;
+  handNote: string;
+  description: string;
+  perkTag: string;
+  nameLabel: string;
+  namePlaceholder: string;
+  emailLabel: string;
+  emailPlaceholder: string;
+  phoneLabel: string;
+  phonePlaceholder: string;
+  planLabel: string;
+  planOptions: string[];
+  offersOptIn: string;
+  submit: string;
+  submitting: string;
+  privacyNote: string;
+  requiredError: string;
+  emailError: string;
+  serverError: string;
+}
+
+export const GATE_COPY: Record<Locale, GateCopy> = {
+  en: {
+    badge: "UNDER CONSTRUCTION • OFF THE TRAIL",
+    headline: "This trail looks lost — we're finding our way back.",
+    handNote: "Pssst… want to take an early peek?",
+    description:
+      "TriboRoots Hostel is still pitching its tents, brewing the masala chai, and painting the murals. Drop your details below to unlock a live sneak peek at what we've built so far — plus we might just send over some founding-stay offers.",
+    perkTag: "First-access hostel deals & launch invites",
+    nameLabel: "Full Name",
+    namePlaceholder: "Aarav Sharma",
+    emailLabel: "Email Address",
+    emailPlaceholder: "you@example.com",
+    phoneLabel: "Phone / WhatsApp",
+    phonePlaceholder: "+91 98765 43210",
+    planLabel: "Trip Vibe",
+    planOptions: [
+      "Solo backpacker",
+      "Workation stay",
+      "Friends / Group trip",
+      "Just peeking around",
+    ],
+    offersOptIn: "Yes, send me early-bird TriboRoots hostel offers",
+    submit: "Unlock Website Peek",
+    submitting: "Unlocking your trail pass…",
+    privacyNote: "No spam — just early access & warm hostel offers.",
+    requiredError: "Please fill in your name, email, and phone number.",
+    emailError: "Please enter a valid email address.",
+    serverError: "Could not unlock right now. Please try again in a moment.",
+  },
+  hi: {
+    badge: "वेबसाइट निर्माणाधीन • राह ढूँढ रहे हैं",
+    headline: "हम अभी रास्ते पर हैं — बहुत जल्द लौटेंगे।",
+    handNote: "अरे… अंदर की एक झलक देखना चाहते हैं?",
+    description:
+      "ट्राइबरूट्स हॉस्टल की दुनिया अभी सजाई जा रही है। अगर आप हमारी अब तक बनी वेबसाइट की शुरुआती झलक देखना चाहते हैं (और ख़ास ओपनिंग ऑफ़र्स पाना चाहते हैं), तो नीचे अपनी जानकारी दर्ज करें।",
+    perkTag: "शुरुआती मेहमानों के लिए ख़ास हॉस्टल ऑफ़र्स",
+    nameLabel: "पूरा नाम",
+    namePlaceholder: "आरव शर्मा",
+    emailLabel: "ईमेल पता",
+    emailPlaceholder: "you@example.com",
+    phoneLabel: "फ़ोन / व्हाट्सऐप",
+    phonePlaceholder: "+91 98765 43210",
+    planLabel: "यात्रा का मूड",
+    planOptions: [
+      "सोलो बैकपैकर",
+      "वर्कएशन स्टे",
+      "दोस्तों का ग्रुप",
+      "बस झलक देख रहा/रही हूँ",
+    ],
+    offersOptIn: "हाँ, मुझे ट्राइबरूट्स के शुरुआती हॉस्टल ऑफ़र्स भेजें",
+    submit: "वेबसाइट की झलक खोलें",
+    submitting: "आपका पास तैयार हो रहा है…",
+    privacyNote: "कोई स्पैम नहीं — सिर्फ़ शुरुआती झलक और ख़ास ऑफ़र्स।",
+    requiredError: "कृपया अपना नाम, ईमेल और फ़ोन नंबर भरें।",
+    emailError: "कृपया सही ईमेल पता दर्ज करें।",
+    serverError: "अभी अनलॉक नहीं हो सका। कृपया थोड़ी देर बाद पुनः प्रयास करें।",
+  },
+};
