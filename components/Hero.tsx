@@ -12,6 +12,10 @@ import {
 } from "lucide-react";
 import heroLogo from "@/assets/main-herosection-logo.png";
 import brandMark from "@/assets/favicon.png";
+import BookingCalendarPopover, {
+  formatShortDate,
+  type DateFieldMode,
+} from "@/components/BookingCalendarPopover";
 import { WaterRippleImage } from "@/components/ui/water-ripple-image";
 import {
   HERO_COPY,
@@ -45,6 +49,14 @@ export default function Hero() {
   const [activeFlipped, setActiveFlipped] = useState<number[]>([]);
   const [hoveredTile, setHoveredTile] = useState<number | null>(null);
   const [isNavOpen, setIsNavOpen] = useState(true);
+  const [activeDateField, setActiveDateField] = useState<DateFieldMode | null>(
+    null
+  );
+  const [checkInDate, setCheckInDate] = useState<Date | null>(null);
+  const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
+  const [guests, setGuests] = useState("");
+  const [isGuestsHovered, setIsGuestsHovered] = useState(false);
+  const [isGuestsFocused, setIsGuestsFocused] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<MenuSectionId | null>(
     null
@@ -55,13 +67,30 @@ export default function Hero() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const chaloAudioRef = useRef<HTMLAudioElement>(null);
   const muteButtonRef = useRef<HTMLButtonElement>(null);
+  const bookingNavRef = useRef<HTMLElement>(null);
   const userPausedRef = useRef(false);
 
   const t = HERO_COPY[locale];
+  const showGuestInput = isGuestsHovered || isGuestsFocused;
 
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
+
+  useEffect(() => {
+    if (!activeDateField) return;
+    const handlePointerDown = (event: PointerEvent) => {
+      if (
+        bookingNavRef.current &&
+        event.target instanceof Node &&
+        !bookingNavRef.current.contains(event.target)
+      ) {
+        setActiveDateField(null);
+      }
+    };
+    window.addEventListener("pointerdown", handlePointerDown);
+    return () => window.removeEventListener("pointerdown", handlePointerDown);
+  }, [activeDateField]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -136,6 +165,8 @@ export default function Hero() {
   };
 
   const handleGoClick = () => {
+    setActiveDateField(null);
+
     const ambient = audioRef.current;
     if (ambient) {
       userPausedRef.current = true;
@@ -149,6 +180,47 @@ export default function Hero() {
       chalo.currentTime = 0;
       void chalo.play().catch(() => {});
     }
+  };
+
+  const toggleDateField = (field: DateFieldMode) => {
+    setIsNavOpen(true);
+    setActiveDateField((prev) => (prev === field ? null : field));
+  };
+
+  const handleGuestsKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      event.currentTarget.blur();
+      return;
+    }
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+    const allowedNavKeys = [
+      "Backspace",
+      "Delete",
+      "Tab",
+      "Escape",
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End",
+    ];
+    if (allowedNavKeys.includes(event.key)) return;
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  };
+
+  const handleGuestsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const digitsOnly = event.target.value.replace(/\D/g, "").slice(0, 2);
+    setGuests(digitsOnly);
+  };
+
+  const handleGuestsBlur = () => {
+    setIsGuestsFocused(false);
+    if (!guests) return;
+    const parsed = Number.parseInt(guests, 10);
+    setGuests(Number.isFinite(parsed) && parsed > 0 ? String(parsed) : "");
   };
 
   const toggleTile = (index: number) => {
@@ -198,7 +270,7 @@ export default function Hero() {
               type="button"
               onClick={() => setLocale("en")}
               aria-pressed={locale === "en"}
-              className={`font-display h-full cursor-pointer rounded-full px-2.5 text-[11px] font-semibold tracking-wider transition sm:px-3 sm:text-xs ${
+              className={`font-display flex h-full w-9 cursor-pointer items-center justify-center rounded-full text-[11px] font-semibold tracking-wider leading-none transition sm:w-10 sm:text-xs ${
                 locale === "en"
                   ? "bg-[#d86a34] text-[#f0e9d7]"
                   : "text-[#2c1d14] hover:text-[#d86a34]"
@@ -210,7 +282,7 @@ export default function Hero() {
               type="button"
               onClick={() => setLocale("hi")}
               aria-pressed={locale === "hi"}
-              className={`font-display h-full cursor-pointer rounded-full px-2.5 text-[11px] font-semibold tracking-wide transition sm:px-3 sm:text-xs ${
+              className={`font-display flex h-full w-9 cursor-pointer items-center justify-center rounded-full text-[11px] font-semibold tracking-wide leading-none transition sm:w-10 sm:text-xs ${
                 locale === "hi"
                   ? "bg-[#d86a34] text-[#f0e9d7]"
                   : "text-[#2c1d14] hover:text-[#d86a34]"
@@ -237,9 +309,9 @@ export default function Hero() {
             onFocus={preloadMenu}
             onClick={() => setIsMenuOpen(true)}
             aria-expanded={isMenuOpen}
-            className="font-display flex h-8 cursor-pointer items-center justify-center rounded-full border border-[#2c1d14] bg-[#2c1d14] px-3.5 text-xs font-semibold tracking-wide text-[#f0e9d7] shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition hover:border-[#d86a34] hover:bg-[#d86a34] hover:text-[#f0e9d7] sm:h-9 sm:px-5 sm:text-sm"
+            className="font-display flex h-8 w-[68px] cursor-pointer items-center justify-center rounded-full border border-[#2c1d14] bg-[#2c1d14] text-xs font-semibold tracking-wide leading-none text-[#f0e9d7] shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition hover:border-[#d86a34] hover:bg-[#d86a34] hover:text-[#f0e9d7] sm:h-9 sm:w-[88px] sm:text-sm"
           >
-            {t.menu}
+            <span className="truncate">{t.menu}</span>
           </button>
         </div>
       </header>
@@ -345,6 +417,7 @@ export default function Hero() {
 
       {/* 4. RESPONSIVE SLIDING BOOKING NAVBAR */}
       <aside
+        ref={bookingNavRef}
         className={`fixed right-0 bottom-3 z-40 flex max-w-[calc(100vw-0.5rem)] items-center transition-transform duration-500 ease-in-out sm:bottom-5 md:bottom-6 ${
           isNavOpen
             ? "translate-x-0 pr-2 sm:pr-5 md:pr-6"
@@ -354,49 +427,150 @@ export default function Hero() {
           if (e.pointerType === "mouse") setIsNavOpen(true);
         }}
       >
+        {/* Check-in / Check-out Calendar Popover */}
+        {isNavOpen && activeDateField && (
+          <BookingCalendarPopover
+            copy={t}
+            activeField={activeDateField}
+            onActiveFieldChange={setActiveDateField}
+            checkIn={checkInDate}
+            checkOut={checkOutDate}
+            onChangeDates={(nextIn, nextOut) => {
+              setCheckInDate(nextIn);
+              setCheckOutDate(nextOut);
+            }}
+            onClose={() => setActiveDateField(null)}
+          />
+        )}
+
         <button
           type="button"
-          onClick={() => setIsNavOpen((prev) => !prev)}
+          onClick={() =>
+            setIsNavOpen((prev) => {
+              if (prev) setActiveDateField(null);
+              return !prev;
+            })
+          }
           aria-label={isNavOpen ? t.hideBooking : t.showBooking}
           className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-l-md bg-[#d86a34] text-[#f0e9d7] shadow-[0_6px_16px_rgba(0,0,0,0.12)] transition hover:bg-[#b85222] active:scale-95 sm:h-12 sm:w-12"
         >
           {isNavOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </button>
 
-        <div className="flex items-stretch overflow-hidden rounded-r-md border border-[#d86a34]/25 shadow-[0_8px_22px_rgba(0,0,0,0.12)]">
-          {/* Quick Book Tag (Desktop & Tablet) */}
-          <div className="font-hand hidden items-center gap-2 whitespace-nowrap border-r border-[#f0e9d7]/25 bg-[#d86a34] px-3.5 text-base font-bold tracking-wide text-[#f0e9d7] md:flex lg:px-4">
-            <span>{t.book}</span>
-            <div className="flex h-5 w-5 items-center justify-center rounded-full border border-[#f0e9d7]/80">
+        <div className="flex h-10 items-stretch overflow-hidden rounded-r-md border border-[#d86a34]/25 bg-[#f0e9d7] shadow-[0_8px_22px_rgba(0,0,0,0.12)] sm:h-12">
+          {/* Quick Book Tag (Desktop & Tablet — fixed width across languages) */}
+          <div className="font-hand hidden h-full shrink-0 items-center justify-center gap-1.5 border-r border-[#f0e9d7]/25 bg-[#d86a34] px-2 text-base font-bold tracking-wide leading-none text-[#f0e9d7] md:flex md:w-[118px] lg:w-[126px]">
+            <span className="truncate">{t.book}</span>
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#f0e9d7]/80">
               <ArrowRight size={11} className="stroke-[2.5]" />
             </div>
           </div>
 
-          {/* Dates Input Trigger */}
+          {/* Check-In Calendar Field (fixed size across languages & selected dates) */}
           <button
             type="button"
-            className="flex cursor-pointer items-center gap-1.5 whitespace-nowrap border-r border-dashed border-[#d86a34]/35 bg-[#f0e9d7] px-2.5 py-2.5 text-[11px] font-bold tracking-wide text-[#2c1d14] transition hover:bg-[#e6ddc7] sm:gap-2.5 sm:px-5 sm:py-3.5 sm:text-sm"
+            onClick={() => toggleDateField("checkIn")}
+            aria-expanded={activeDateField === "checkIn"}
+            className={`flex h-full w-[68px] min-[375px]:w-[82px] min-[420px]:w-[92px] sm:w-[116px] md:w-[126px] lg:w-[134px] shrink-0 cursor-pointer items-center justify-center px-1.5 text-[10px] min-[375px]:text-[11px] font-bold tracking-wide leading-none text-[#2c1d14] transition sm:px-2.5 sm:text-sm ${
+              activeDateField === "checkIn"
+                ? "bg-[#e6ddc7] shadow-[inset_0_-2.5px_0_#d86a34]"
+                : "bg-[#f0e9d7] hover:bg-[#e6ddc7]"
+            }`}
           >
-            <span>{t.checkIn}</span>
-            <ArrowRight size={13} className="stroke-[2.5] text-[#d86a34]" />
-            <span>{t.checkOut}</span>
+            <span
+              className={`truncate tabular-nums ${
+                checkInDate ? "text-[#b85222]" : ""
+              }`}
+            >
+              {checkInDate
+                ? formatShortDate(checkInDate, t.monthsShort)
+                : t.checkIn}
+            </span>
           </button>
 
-          {/* Guests Selector */}
+          {/* Range Arrow Connector */}
+          <div className="flex h-full w-3.5 shrink-0 items-center justify-center bg-[#f0e9d7] text-[#d86a34] sm:w-5 md:w-6">
+            <ArrowRight size={12} className="stroke-[2.5]" />
+          </div>
+
+          {/* Check-Out Calendar Field (fixed size across languages & selected dates) */}
           <button
             type="button"
-            className="cursor-pointer whitespace-nowrap bg-[#f0e9d7] px-2.5 py-2.5 text-[11px] font-bold tracking-wide text-[#2c1d14] transition hover:bg-[#e6ddc7] sm:px-5 sm:py-3.5 sm:text-sm"
+            onClick={() => toggleDateField("checkOut")}
+            aria-expanded={activeDateField === "checkOut"}
+            className={`flex h-full w-[68px] min-[375px]:w-[82px] min-[420px]:w-[92px] sm:w-[116px] md:w-[126px] lg:w-[134px] shrink-0 cursor-pointer items-center justify-center border-r border-dashed border-[#d86a34]/35 px-1.5 text-[10px] min-[375px]:text-[11px] font-bold tracking-wide leading-none text-[#2c1d14] transition sm:px-2.5 sm:text-sm ${
+              activeDateField === "checkOut"
+                ? "bg-[#e6ddc7] shadow-[inset_0_-2.5px_0_#d86a34]"
+                : "bg-[#f0e9d7] hover:bg-[#e6ddc7]"
+            }`}
           >
-            {t.guests}
+            <span
+              className={`truncate tabular-nums ${
+                checkOutDate ? "text-[#b85222]" : ""
+              }`}
+            >
+              {checkOutDate
+                ? formatShortDate(checkOutDate, t.monthsShort)
+                : t.checkOut}
+            </span>
           </button>
 
-          {/* Submit "Go!" Button */}
+          {/* Guests Slot: transforms on hover / focus into a numbers-only input without resizing */}
+          <div
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") setIsGuestsHovered(true);
+            }}
+            onPointerLeave={() => setIsGuestsHovered(false)}
+            className="relative h-full w-[62px] min-[375px]:w-[70px] min-[420px]:w-[78px] sm:w-[104px] md:w-[114px] lg:w-[122px] shrink-0 bg-[#f0e9d7]"
+          >
+            {/* Idle Label */}
+            <div
+              aria-hidden={showGuestInput}
+              className={`pointer-events-none absolute inset-0 flex items-center justify-center px-1.5 text-[10px] min-[375px]:text-[11px] font-bold tracking-wide leading-none transition-opacity duration-150 sm:px-2.5 sm:text-sm ${
+                showGuestInput ? "opacity-0" : "opacity-100"
+              } ${guests ? "text-[#b85222]" : "text-[#2c1d14]"}`}
+            >
+              <span className="truncate tabular-nums">
+                {guests ? `${guests} ${t.guests}` : t.guests}
+              </span>
+            </div>
+
+            {/* Numbers-Only Input Box (revealed on hover, focus, or tap) */}
+            <div
+              className={`absolute inset-0 flex items-center justify-center p-1 transition-opacity duration-150 sm:p-1.5 ${
+                showGuestInput
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+            >
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={2}
+                autoComplete="off"
+                aria-label={t.guestsInputLabel}
+                placeholder="0"
+                value={guests}
+                onFocus={() => {
+                  setIsGuestsFocused(true);
+                  setActiveDateField(null);
+                }}
+                onBlur={handleGuestsBlur}
+                onKeyDown={handleGuestsKeyDown}
+                onChange={handleGuestsChange}
+                className="h-full w-full rounded border border-[#d86a34]/75 bg-[#fcf9f1] px-1 text-center font-mono text-xs font-bold tabular-nums leading-none text-[#2c1d14] placeholder-[#2c1d14]/40 shadow-inner outline-none focus:border-[#d86a34] focus:ring-1 focus:ring-[#d86a34] sm:text-sm"
+              />
+            </div>
+          </div>
+
+          {/* Submit "Go!" Button (fixed width across languages) */}
           <button
             type="button"
             onClick={handleGoClick}
-            className="font-display cursor-pointer whitespace-nowrap bg-[#2c1d14] px-3.5 py-2.5 text-sm font-bold tracking-wide text-[#f0e9d7] transition hover:bg-[#b85222] hover:text-[#f0e9d7] active:scale-95 sm:px-6 sm:py-3.5 sm:text-lg"
+            className="font-display flex h-full w-[46px] min-[375px]:w-[52px] min-[420px]:w-[58px] sm:w-[76px] md:w-[84px] lg:w-[88px] shrink-0 cursor-pointer items-center justify-center bg-[#2c1d14] text-sm font-bold tracking-wide leading-none text-[#f0e9d7] transition hover:bg-[#b85222] hover:text-[#f0e9d7] active:scale-95 sm:text-lg"
           >
-            {t.go}
+            <span className="truncate">{t.go}</span>
           </button>
         </div>
       </aside>

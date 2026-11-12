@@ -38,9 +38,19 @@ export interface HeroCopy {
   checkIn: string;
   checkOut: string;
   guests: string;
+  guestsInputLabel: string;
   go: string;
   hideBooking: string;
   showBooking: string;
+  months: string[];
+  monthsShort: string[];
+  weekdaysShort: string[];
+  prevMonth: string;
+  nextMonth: string;
+  clearDates: string;
+  doneDates: string;
+  selectDatesHint: string;
+  nightsLabel: (nights: number) => string;
 }
 
 export const HERO_COPY: Record<Locale, HeroCopy> = {
@@ -114,9 +124,45 @@ export const HERO_COPY: Record<Locale, HeroCopy> = {
     checkIn: "CHECK IN",
     checkOut: "CHECK OUT",
     guests: "GUESTS",
+    guestsInputLabel: "Number of guests",
     go: "Go!",
     hideBooking: "Hide booking bar",
     showBooking: "Show booking bar",
+    months: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
+    monthsShort: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    weekdaysShort: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+    prevMonth: "Previous month",
+    nextMonth: "Next month",
+    clearDates: "Clear",
+    doneDates: "Done",
+    selectDatesHint: "Pick dates",
+    nightsLabel: (nights) => `${nights} ${nights === 1 ? "night" : "nights"}`,
   },
   hi: {
     brandName: "ट्राइबरूट्स",
@@ -188,9 +234,45 @@ export const HERO_COPY: Record<Locale, HeroCopy> = {
     checkIn: "चेक-इन",
     checkOut: "चेक-आउट",
     guests: "मेहमान",
+    guestsInputLabel: "मेहमानों की संख्या",
     go: "चलो!",
     hideBooking: "बुकिंग बार छिपाएँ",
     showBooking: "बुकिंग बार दिखाएँ",
+    months: [
+      "जनवरी",
+      "फ़रवरी",
+      "मार्च",
+      "अप्रैल",
+      "मई",
+      "जून",
+      "जुलाई",
+      "अगस्त",
+      "सितंबर",
+      "अक्तूबर",
+      "नवंबर",
+      "दिसंबर",
+    ],
+    monthsShort: [
+      "जन॰",
+      "फ़र॰",
+      "मार्च",
+      "अप्रै॰",
+      "मई",
+      "जून",
+      "जुला॰",
+      "अग॰",
+      "सित॰",
+      "अक्तू॰",
+      "नव॰",
+      "दिस॰",
+    ],
+    weekdaysShort: ["र", "सो", "मं", "बु", "गु", "शु", "श"],
+    prevMonth: "पिछला महीना",
+    nextMonth: "अगला महीना",
+    clearDates: "साफ़",
+    doneDates: "हो गया",
+    selectDatesHint: "तारीख़ चुनें",
+    nightsLabel: (nights) => `${nights} ${nights === 1 ? "रात" : "रातें"}`,
   },
 };
 
