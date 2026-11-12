@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import {
   Volume2,
@@ -11,7 +12,6 @@ import {
 } from "lucide-react";
 import heroLogo from "@/assets/main-herosection-logo.png";
 import brandMark from "@/assets/favicon.png";
-import PlateMenu from "@/components/PlateMenu";
 import { WaterRippleImage } from "@/components/ui/water-ripple-image";
 import {
   HERO_COPY,
@@ -20,20 +20,25 @@ import {
   type MenuSectionId,
 } from "@/lib/i18n";
 
+const BackpackRailMenu = dynamic(
+  () => import("@/components/BackpackRailMenu"),
+  { ssr: false }
+);
+
 // Curated hostel & lifestyle imagery for the tile backsides
 const TILE_IMAGES = [
-  "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80", // hostel dorm
-  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80", // bar & social
-  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80", // pool / chill
-  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80", // cozy lounge
-  "https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=800&q=80", // drinks & friends
-  "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80", // bunk beds
-  "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=80", // cocktail bar
-  "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=800&q=80", // rooftop evening
-  "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80", // boutique room
-  "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80", // courtyard
-  "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80", // travelers hanging out
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", // scenic river
+  "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=720&q=75", // hostel dorm
+  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=720&q=75", // bar & social
+  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=720&q=75", // pool / chill
+  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=720&q=75", // cozy lounge
+  "https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=720&q=75", // drinks & friends
+  "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=720&q=75", // bunk beds
+  "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=720&q=75", // cocktail bar
+  "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=720&q=75", // rooftop evening
+  "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=720&q=75", // boutique room
+  "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=720&q=75", // courtyard
+  "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=720&q=75", // travelers hanging out
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=720&q=75", // scenic river
 ];
 
 export default function Hero() {
@@ -72,7 +77,6 @@ export default function Hero() {
           setIsMuted(false);
         })
         .catch(() => {
-          // Autoplay blocked until first user interaction
           setIsMuted(true);
         });
     };
@@ -147,50 +151,54 @@ export default function Hero() {
     }
   };
 
-  // Toggle flip on click (especially useful for touch/mobile devices)
   const toggleTile = (index: number) => {
     setActiveFlipped((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
 
+  const preloadMenu = () => {
+    void import("@/components/BackpackRailMenu");
+  };
+
   return (
-    <main className="relative h-screen w-screen overflow-hidden bg-[#f0e9d7] select-none font-sans">
+    <main className="relative h-dvh w-full overflow-hidden bg-[#f0e9d7] select-none font-sans">
       <audio
         ref={audioRef}
         src="/audio/ambient.mp3"
         loop
-        preload="auto"
+        preload="metadata"
         onPlay={() => setIsMuted(false)}
         onPause={() => setIsMuted(true)}
       />
-      <audio ref={chaloAudioRef} src="/audio/chalo.mp3" preload="auto" />
+      <audio ref={chaloAudioRef} src="/audio/chalo.mp3" preload="metadata" />
+
       {/* 1. TOP HEADER / APP BAR */}
-      <header className="absolute top-0 left-0 right-0 z-40 flex items-center justify-between px-5 sm:px-7 py-4 pointer-events-none">
+      <header className="pointer-events-none absolute top-0 right-0 left-0 z-40 flex items-center justify-between px-3.5 py-3 sm:px-6 sm:py-4 md:px-8">
         {/* Prominent Backpack Brand Mark */}
-        <div className="pointer-events-auto relative h-12 w-12 sm:h-14 sm:w-14 overflow-hidden rounded-2xl bg-[#d86a34] ring-2 ring-[#f0e9d7]/85 shadow-[0_6px_18px_rgba(0,0,0,0.18)] transition-transform duration-200 hover:scale-105">
+        <div className="pointer-events-auto relative h-10 w-10 overflow-hidden rounded-xl bg-[#d86a34] ring-2 ring-[#f0e9d7]/85 shadow-[0_6px_18px_rgba(0,0,0,0.18)] transition-transform duration-200 hover:scale-105 sm:h-12 sm:w-12 sm:rounded-2xl md:h-14 md:w-14">
           <Image
             src={brandMark}
             alt="TriboRoots backpack logo"
             fill
-            sizes="56px"
+            sizes="(max-width: 640px) 40px, 56px"
             className="object-cover"
           />
         </div>
 
         {/* Action Controls */}
-        <div className="pointer-events-auto flex items-center gap-2.5 sm:gap-3">
+        <div className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 md:gap-3">
           {/* Bilingual Switch: English / Hindi */}
           <div
             role="group"
             aria-label={t.switchLanguageLabel}
-            className="flex h-9 items-center rounded-full bg-[#f0e9d7]/90 backdrop-blur-sm border border-[#d86a34]/40 p-0.5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
+            className="flex h-8 items-center rounded-full border border-[#d86a34]/40 bg-[#f0e9d7]/90 p-0.5 shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur-sm sm:h-9"
           >
             <button
               type="button"
               onClick={() => setLocale("en")}
               aria-pressed={locale === "en"}
-              className={`font-display h-full px-3 rounded-full text-xs font-semibold tracking-wider transition cursor-pointer ${
+              className={`font-display h-full cursor-pointer rounded-full px-2.5 text-[11px] font-semibold tracking-wider transition sm:px-3 sm:text-xs ${
                 locale === "en"
                   ? "bg-[#d86a34] text-[#f0e9d7]"
                   : "text-[#2c1d14] hover:text-[#d86a34]"
@@ -202,7 +210,7 @@ export default function Hero() {
               type="button"
               onClick={() => setLocale("hi")}
               aria-pressed={locale === "hi"}
-              className={`font-display h-full px-3 rounded-full text-xs font-semibold tracking-wide transition cursor-pointer ${
+              className={`font-display h-full cursor-pointer rounded-full px-2.5 text-[11px] font-semibold tracking-wide transition sm:px-3 sm:text-xs ${
                 locale === "hi"
                   ? "bg-[#d86a34] text-[#f0e9d7]"
                   : "text-[#2c1d14] hover:text-[#d86a34]"
@@ -218,23 +226,26 @@ export default function Hero() {
             onClick={toggleAudio}
             aria-label={isMuted ? t.unmuteLabel : t.muteLabel}
             aria-pressed={!isMuted}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f0e9d7]/90 backdrop-blur-sm border border-[#d86a34]/40 text-[#2c1d14] hover:bg-[#d86a34] hover:text-[#f0e9d7] hover:border-[#d86a34] transition cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-[#d86a34]/40 bg-[#f0e9d7]/90 text-[#2c1d14] shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur-sm transition hover:border-[#d86a34] hover:bg-[#d86a34] hover:text-[#f0e9d7] sm:h-9 sm:w-9"
           >
-            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
           </button>
+
           <button
             type="button"
+            onMouseEnter={preloadMenu}
+            onFocus={preloadMenu}
             onClick={() => setIsMenuOpen(true)}
             aria-expanded={isMenuOpen}
-            className="font-display flex h-9 px-5 items-center justify-center rounded-full bg-[#2c1d14] border border-[#2c1d14] text-sm font-semibold text-[#f0e9d7] tracking-wide hover:bg-[#d86a34] hover:border-[#d86a34] hover:text-[#f0e9d7] transition cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+            className="font-display flex h-8 cursor-pointer items-center justify-center rounded-full border border-[#2c1d14] bg-[#2c1d14] px-3.5 text-xs font-semibold tracking-wide text-[#f0e9d7] shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition hover:border-[#d86a34] hover:bg-[#d86a34] hover:text-[#f0e9d7] sm:h-9 sm:px-5 sm:text-sm"
           >
             {t.menu}
           </button>
         </div>
       </header>
 
-      {/* 2. INTERACTIVE FLIPPING GRID (4 Columns x 3 Rows) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-6 md:grid-rows-3 h-full w-full">
+      {/* 2. INTERACTIVE RESPONSIVE FLIPPING GRID */}
+      <div className="grid h-full w-full grid-cols-2 grid-rows-6 sm:grid-cols-3 sm:grid-rows-4 md:grid-cols-4 md:grid-rows-3 max-md:landscape:grid-cols-4 max-md:landscape:grid-rows-3">
         {TILE_IMAGES.map((imgUrl, index) => {
           const isFlipped = activeFlipped.includes(index);
           const isHovered = hoveredTile === index;
@@ -247,8 +258,10 @@ export default function Hero() {
               aria-pressed={isFlipped}
               aria-label={t.tileLabel(index + 1)}
               onClick={() => toggleTile(index)}
-              onMouseEnter={() => setHoveredTile(index)}
-              onMouseLeave={() =>
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") setHoveredTile(index);
+              }}
+              onPointerLeave={() =>
                 setHoveredTile((prev) => (prev === index ? null : prev))
               }
               onKeyDown={(e) => {
@@ -257,7 +270,7 @@ export default function Hero() {
                   toggleTile(index);
                 }
               }}
-              className={`group relative h-full w-full border-[0.5px] border-[#d86a34]/25 [perspective:1000px] cursor-pointer focus:outline-none ${
+              className={`group relative h-full w-full cursor-pointer border-[0.5px] border-[#d86a34]/25 [perspective:1000px] focus:outline-none ${
                 isFlipped ? "z-30" : "z-10"
               }`}
             >
@@ -268,50 +281,48 @@ export default function Hero() {
                 }`}
               >
                 {/* Front Side (Frosted Warm Cream Glass Tile #f0e9d7 + Hover Water Ripple) */}
-                <div className="absolute inset-0 bg-[#f0e9d7]/95 [backface-visibility:hidden] overflow-hidden shadow-[inset_0_1px_0_rgba(248,243,230,0.8),inset_0_-1px_0_rgba(216,106,52,0.1)]">
+                <div className="absolute inset-0 overflow-hidden bg-[#f0e9d7]/95 [backface-visibility:hidden] shadow-[inset_0_1px_0_rgba(248,243,230,0.8),inset_0_-1px_0_rgba(216,106,52,0.1)]">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#f7f2e4]/65 via-transparent to-[#d86a34]/[0.06]" />
-                  <WaterRippleImage
-                    src="/textures/tile-cream.png"
-                    blueish={0.08}
-                    scale={6}
-                    illumination={0.28}
-                    surfaceDistortion={0.055}
-                    waterDistortion={0.03}
-                    fullBleed
-                    active={isHovered && !isFlipped}
-                    className={`absolute inset-0 transition-opacity duration-300 ${
-                      isHovered && !isFlipped ? "opacity-100" : "opacity-0"
-                    }`}
-                  />
+                  {isHovered && !isFlipped && (
+                    <WaterRippleImage
+                      src="/textures/tile-cream.png"
+                      blueish={0.08}
+                      scale={6}
+                      illumination={0.28}
+                      surfaceDistortion={0.055}
+                      waterDistortion={0.03}
+                      fullBleed
+                      active
+                      className="absolute inset-0"
+                    />
+                  )}
                   <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#f0e9d7]/60" />
                 </div>
 
-                {/* Back Side (Revealed Photo on click + Hover Water Ripple + Glass Glaze) */}
-                <div className="absolute inset-0 [transform:rotateY(180deg)] [backface-visibility:hidden] overflow-hidden shadow-[inset_0_1px_1px_rgba(240,233,215,0.45),inset_0_-1px_1px_rgba(44,29,20,0.22)]">
+                {/* Back Side (Revealed Photo on click + Persistent Water Ripple + Glass Glaze) */}
+                <div className="absolute inset-0 overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-[inset_0_1px_1px_rgba(240,233,215,0.45),inset_0_-1px_1px_rgba(44,29,20,0.22)]">
                   <Image
                     src={imgUrl}
                     alt={t.photoAlt(index + 1)}
                     fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
-                  <WaterRippleImage
-                    src={imgUrl}
-                    blueish={0.18}
-                    scale={6}
-                    illumination={0.14}
-                    surfaceDistortion={0.04}
-                    waterDistortion={0.025}
-                    fullBleed
-                    active={isFlipped}
-                    className={`absolute inset-0 transition-opacity duration-300 ${
-                      isFlipped ? "opacity-100" : "opacity-0"
-                    }`}
-                  />
-                  {/* Warm terracotta-espresso mood tint */}
+                  {isFlipped && (
+                    <WaterRippleImage
+                      src={imgUrl}
+                      blueish={0.18}
+                      scale={6}
+                      illumination={0.14}
+                      surfaceDistortion={0.04}
+                      waterDistortion={0.025}
+                      fullBleed
+                      active
+                      className="absolute inset-0"
+                    />
+                  )}
                   <div className="pointer-events-none absolute inset-0 bg-[#d86a34]/15 mix-blend-multiply" />
                   <div className="pointer-events-none absolute inset-0 bg-[#2c1d14]/12" />
-                  {/* Subtle glass specular sheen & inner beveled border */}
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#f0e9d7]/25 via-[#f0e9d7]/[0.04] to-[#2c1d14]/18 backdrop-blur-[0.5px]" />
                   <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#f0e9d7]/35" />
                 </div>
@@ -322,41 +333,41 @@ export default function Hero() {
       </div>
 
       {/* 3. CENTER BRAND LOGO (Pointer events none so tiles underneath receive cursor) */}
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none px-6">
-        <div className="relative flex items-center justify-center">
-          <Image
-            src={heroLogo}
-            alt={t.logoAlt}
-            preload={true}
-            sizes="(max-width: 640px) 280px, (max-width: 768px) 380px, 540px"
-            className="w-[270px] sm:w-[390px] md:w-[500px] lg:w-[560px] h-auto object-contain drop-shadow-[0_6px_16px_rgba(0,0,0,0.12)]"
-          />
-        </div>
+      <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center px-6">
+        <Image
+          src={heroLogo}
+          alt={t.logoAlt}
+          preload={true}
+          sizes="(max-width: 640px) 74vw, (max-width: 768px) 64vw, (max-width: 1024px) 56vw, 560px"
+          className="h-auto max-h-[40dvh] w-[min(74vw,300px)] object-contain drop-shadow-[0_6px_16px_rgba(0,0,0,0.12)] sm:w-[min(64vw,420px)] md:w-[min(56vw,520px)] lg:w-[min(46vw,560px)]"
+        />
       </div>
 
-      {/* 4. FLOATING / SLIDING BOOKING NAVBAR */}
+      {/* 4. RESPONSIVE SLIDING BOOKING NAVBAR */}
       <aside
-        className={`fixed bottom-6 right-0 z-50 flex items-center transition-transform duration-500 ease-in-out ${
-          isNavOpen ? "translate-x-0 pr-4 sm:pr-6" : "translate-x-[calc(100%-48px)]"
+        className={`fixed right-0 bottom-3 z-40 flex max-w-[calc(100vw-0.5rem)] items-center transition-transform duration-500 ease-in-out sm:bottom-5 md:bottom-6 ${
+          isNavOpen
+            ? "translate-x-0 pr-2 sm:pr-5 md:pr-6"
+            : "translate-x-[calc(100%-40px)] sm:translate-x-[calc(100%-48px)]"
         }`}
-        onMouseEnter={() => setIsNavOpen(true)}
+        onPointerEnter={(e) => {
+          if (e.pointerType === "mouse") setIsNavOpen(true);
+        }}
       >
-        {/* Slide Handle / Toggle Arrow */}
         <button
           type="button"
-          onClick={() => setIsNavOpen(!isNavOpen)}
+          onClick={() => setIsNavOpen((prev) => !prev)}
           aria-label={isNavOpen ? t.hideBooking : t.showBooking}
-          className="flex h-12 w-12 items-center justify-center bg-[#d86a34] text-[#f0e9d7] rounded-l-md shadow-[0_6px_16px_rgba(0,0,0,0.12)] hover:bg-[#b85222] transition active:scale-95 cursor-pointer"
+          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-l-md bg-[#d86a34] text-[#f0e9d7] shadow-[0_6px_16px_rgba(0,0,0,0.12)] transition hover:bg-[#b85222] active:scale-95 sm:h-12 sm:w-12"
         >
-          {isNavOpen ? <ChevronRight size={22} /> : <ChevronLeft size={22} />}
+          {isNavOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </button>
 
-        {/* Main Booking Bar Content */}
-        <div className="flex flex-wrap md:flex-nowrap items-stretch shadow-[0_8px_22px_rgba(0,0,0,0.12)] overflow-hidden rounded-r-md border border-[#d86a34]/25">
-          {/* Quick Book Tag */}
-          <div className="font-hand hidden sm:flex items-center gap-2 bg-[#d86a34] px-4 text-base font-bold tracking-wide text-[#f0e9d7] border-r border-[#f0e9d7]/25 whitespace-nowrap">
+        <div className="flex items-stretch overflow-hidden rounded-r-md border border-[#d86a34]/25 shadow-[0_8px_22px_rgba(0,0,0,0.12)]">
+          {/* Quick Book Tag (Desktop & Tablet) */}
+          <div className="font-hand hidden items-center gap-2 whitespace-nowrap border-r border-[#f0e9d7]/25 bg-[#d86a34] px-3.5 text-base font-bold tracking-wide text-[#f0e9d7] md:flex lg:px-4">
             <span>{t.book}</span>
-            <div className="w-5 h-5 rounded-full border border-[#f0e9d7]/80 flex items-center justify-center">
+            <div className="flex h-5 w-5 items-center justify-center rounded-full border border-[#f0e9d7]/80">
               <ArrowRight size={11} className="stroke-[2.5]" />
             </div>
           </div>
@@ -364,17 +375,17 @@ export default function Hero() {
           {/* Dates Input Trigger */}
           <button
             type="button"
-            className="flex items-center gap-2.5 sm:gap-3 bg-[#f0e9d7] px-4 sm:px-6 py-3.5 text-xs sm:text-sm font-bold tracking-wide text-[#2c1d14] hover:bg-[#e6ddc7] transition border-r border-dashed border-[#d86a34]/35 cursor-pointer whitespace-nowrap"
+            className="flex cursor-pointer items-center gap-1.5 whitespace-nowrap border-r border-dashed border-[#d86a34]/35 bg-[#f0e9d7] px-2.5 py-2.5 text-[11px] font-bold tracking-wide text-[#2c1d14] transition hover:bg-[#e6ddc7] sm:gap-2.5 sm:px-5 sm:py-3.5 sm:text-sm"
           >
             <span>{t.checkIn}</span>
-            <ArrowRight size={14} className="stroke-[2.5] text-[#d86a34]" />
+            <ArrowRight size={13} className="stroke-[2.5] text-[#d86a34]" />
             <span>{t.checkOut}</span>
           </button>
 
           {/* Guests Selector */}
           <button
             type="button"
-            className="bg-[#f0e9d7] px-4 sm:px-6 py-3.5 text-xs sm:text-sm font-bold tracking-wide text-[#2c1d14] hover:bg-[#e6ddc7] transition cursor-pointer whitespace-nowrap"
+            className="cursor-pointer whitespace-nowrap bg-[#f0e9d7] px-2.5 py-2.5 text-[11px] font-bold tracking-wide text-[#2c1d14] transition hover:bg-[#e6ddc7] sm:px-5 sm:py-3.5 sm:text-sm"
           >
             {t.guests}
           </button>
@@ -383,16 +394,16 @@ export default function Hero() {
           <button
             type="button"
             onClick={handleGoClick}
-            className="font-display bg-[#2c1d14] px-5 sm:px-6 py-3.5 text-base sm:text-lg font-bold tracking-wide text-[#f0e9d7] hover:bg-[#b85222] hover:text-[#f0e9d7] active:scale-95 transition cursor-pointer whitespace-nowrap"
+            className="font-display cursor-pointer whitespace-nowrap bg-[#2c1d14] px-3.5 py-2.5 text-sm font-bold tracking-wide text-[#f0e9d7] transition hover:bg-[#b85222] hover:text-[#f0e9d7] active:scale-95 sm:px-6 sm:py-3.5 sm:text-lg"
           >
             {t.go}
           </button>
         </div>
       </aside>
 
-      {/* 5. FALLING PLATE MENU OVERLAY */}
+      {/* 5. BACKPACK RAIL MENU OVERLAY */}
       {isMenuOpen && (
-        <PlateMenu
+        <BackpackRailMenu
           isOpen={isMenuOpen}
           soundEnabled={isSfxEnabled}
           copy={t}

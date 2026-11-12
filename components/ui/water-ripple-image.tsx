@@ -217,6 +217,17 @@ class SharedWaterRippleRenderer {
     }
     this.gl = gl;
 
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && this.rafId !== null) {
+          cancelAnimationFrame(this.rafId);
+          this.rafId = null;
+        } else if (!document.hidden) {
+          this.scheduleLoop();
+        }
+      });
+    }
+
     const program = createProgram(gl, VERT, FRAG);
     gl.useProgram(program);
 
@@ -289,7 +300,7 @@ class SharedWaterRippleRenderer {
   }
 
   private scheduleLoop() {
-    if (this.rafId !== null) return;
+    if (this.rafId !== null || document.hidden) return;
     const hasActive = Array.from(this.targets).some((t) => t.active);
     if (!hasActive) return;
 
@@ -389,7 +400,7 @@ export default function WaterRippleImage({
     const renderer = getSharedRenderer();
     if (!ctx2d || !renderer) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
     const syncSize = () => {
       const w = Math.max(1, Math.floor(wrapper.clientWidth * dpr));
