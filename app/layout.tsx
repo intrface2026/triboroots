@@ -7,6 +7,7 @@ import {
   Plus_Jakarta_Sans,
 } from "next/font/google";
 import FluffyKittenCursor from "@/components/FluffyKittenCursor";
+import ContentShield from "@/components/ContentShield";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <FluffyKittenCursor />
+        <ContentShield />
         {children}
       </body>
     </html>
