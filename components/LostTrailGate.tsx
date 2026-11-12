@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Loader2, X } from "lucide-react";
 import heroLogo from "@/assets/main-herosection-logo.png";
 import brandMark from "@/assets/favicon.png";
+import { LanguageSlider } from "@/components/ui/language-slider";
 import { WaterRippleImage } from "@/components/ui/water-ripple-image";
 import { GATE_COPY, type Locale } from "@/lib/i18n";
 
@@ -123,36 +124,11 @@ export default function LostTrailGate() {
           />
         </div>
 
-        <div
-          role="group"
-          aria-label="Language switch"
-          className="flex h-8 items-center rounded-full border border-[#d86a34]/40 bg-[#f0e9d7]/85 p-0.5 shadow-xs backdrop-blur-sm sm:h-9"
-        >
-          <button
-            type="button"
-            onClick={() => setLocale("en")}
-            aria-pressed={locale === "en"}
-            className={`font-display h-full cursor-pointer rounded-full px-3 text-xs font-semibold transition ${
-              locale === "en"
-                ? "bg-[#d86a34] text-[#f0e9d7]"
-                : "text-[#2c1d14] hover:text-[#d86a34]"
-            }`}
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            onClick={() => setLocale("hi")}
-            aria-pressed={locale === "hi"}
-            className={`font-display h-full cursor-pointer rounded-full px-3 text-xs font-semibold transition ${
-              locale === "hi"
-                ? "bg-[#d86a34] text-[#f0e9d7]"
-                : "text-[#2c1d14] hover:text-[#d86a34]"
-            }`}
-          >
-            हिं
-          </button>
-        </div>
+        <LanguageSlider
+          locale={locale}
+          onChange={setLocale}
+          ariaLabel="Language switch"
+        />
       </header>
 
       {/* Centered Minimal Front Stage */}

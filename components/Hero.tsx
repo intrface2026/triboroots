@@ -16,6 +16,7 @@ import BookingCalendarPopover, {
   formatShortDate,
   type DateFieldMode,
 } from "@/components/BookingCalendarPopover";
+import { LanguageSlider } from "@/components/ui/language-slider";
 import { WaterRippleImage } from "@/components/ui/water-ripple-image";
 import {
   HERO_COPY,
@@ -261,36 +262,11 @@ export default function Hero() {
         {/* Action Controls */}
         <div className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 md:gap-3">
           {/* Bilingual Switch: English / Hindi */}
-          <div
-            role="group"
-            aria-label={t.switchLanguageLabel}
-            className="flex h-8 items-center rounded-full border border-[#d86a34]/40 bg-[#f0e9d7]/90 p-0.5 shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur-sm sm:h-9"
-          >
-            <button
-              type="button"
-              onClick={() => setLocale("en")}
-              aria-pressed={locale === "en"}
-              className={`font-display flex h-full w-9 cursor-pointer items-center justify-center rounded-full text-[11px] font-semibold tracking-wider leading-none transition sm:w-10 sm:text-xs ${
-                locale === "en"
-                  ? "bg-[#d86a34] text-[#f0e9d7]"
-                  : "text-[#2c1d14] hover:text-[#d86a34]"
-              }`}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => setLocale("hi")}
-              aria-pressed={locale === "hi"}
-              className={`font-display flex h-full w-9 cursor-pointer items-center justify-center rounded-full text-[11px] font-semibold tracking-wide leading-none transition sm:w-10 sm:text-xs ${
-                locale === "hi"
-                  ? "bg-[#d86a34] text-[#f0e9d7]"
-                  : "text-[#2c1d14] hover:text-[#d86a34]"
-              }`}
-            >
-              हिं
-            </button>
-          </div>
+          <LanguageSlider
+            locale={locale}
+            onChange={setLocale}
+            ariaLabel={t.switchLanguageLabel}
+          />
 
           <button
             ref={muteButtonRef}
