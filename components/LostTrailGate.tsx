@@ -3,13 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  Sparkles,
-  ArrowRight,
-  Loader2,
-  Check,
-  X,
-} from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import heroLogo from "@/assets/main-herosection-logo.png";
 import brandMark from "@/assets/favicon.png";
 import { WaterRippleImage } from "@/components/ui/water-ripple-image";
@@ -24,8 +18,7 @@ export default function LostTrailGate() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [plan, setPlan] = useState("");
-  const [offersOptIn, setOffersOptIn] = useState(true);
+  const [note, setNote] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -56,8 +49,9 @@ export default function LostTrailGate() {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
     const trimmedPhone = phone.trim();
+    const trimmedNote = note.trim();
 
-    if (!trimmedName || !trimmedEmail || !trimmedPhone) {
+    if (!trimmedName || !trimmedEmail || !trimmedPhone || !trimmedNote) {
       setError(t.requiredError);
       return;
     }
@@ -76,8 +70,7 @@ export default function LostTrailGate() {
           name: trimmedName,
           email: trimmedEmail,
           phone: trimmedPhone,
-          plan: plan || t.planOptions[0],
-          offersOptIn,
+          note: trimmedNote,
           locale,
         }),
       });
@@ -195,7 +188,7 @@ export default function LostTrailGate() {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="font-display mt-8 inline-flex cursor-pointer items-center gap-2.5 rounded-full border-2 border-[#2c1d14] bg-[#2c1d14] px-8 py-4 text-base font-bold tracking-wide text-[#f0e9d7] shadow-[0_5px_0_#d86a34] transition-all hover:-translate-y-0.5 hover:bg-[#b85222] hover:border-[#b85222] hover:shadow-[0_7px_0_#2c1d14] active:translate-y-1 active:shadow-[0_1px_0_#d86a34] sm:text-lg"
+          className="font-display mt-8 inline-flex cursor-pointer items-center gap-2.5 rounded-full border-2 border-[#2c1d14] bg-[#2c1d14] px-8 py-4 text-base font-bold tracking-wide text-[#f0e9d7] shadow-[0_5px_0_#d86a34] transition-all hover:-translate-y-0.5 hover:border-[#b85222] hover:bg-[#b85222] hover:shadow-[0_7px_0_#2c1d14] active:translate-y-1 active:shadow-[0_1px_0_#d86a34] sm:text-lg"
         >
           <span>{t.ctaButton}</span>
         </button>
@@ -205,50 +198,46 @@ export default function LostTrailGate() {
         </p>
       </section>
 
-      {/* Floating Glass Modal Form over Live Water-Ripple Background */}
+      {/* Floating Editorial Guestbook Modal over Live Water-Ripple Background */}
       {isModalOpen && (
         <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="peek-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#2c1d14]/35 p-3.5 backdrop-blur-xs sm:p-6"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#2c1d14]/35 p-4 backdrop-blur-xs sm:p-6"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsModalOpen(false);
           }}
         >
-          <div className="relative max-h-[90dvh] w-full max-w-lg overflow-y-auto rounded-3xl border border-[#f0e9d7]/75 bg-[#f0e9d7]/85 p-5 text-[#2c1d14] shadow-[0_32px_70px_-14px_rgba(44,29,20,0.42)] ring-1 ring-[#2c1d14]/12 backdrop-blur-xl sm:p-7">
+          <div className="relative max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-[28px] border border-[#f0e9d7]/80 bg-[#f0e9d7]/86 p-6 text-[#2c1d14] shadow-[0_32px_70px_-14px_rgba(44,29,20,0.42)] ring-1 ring-[#2c1d14]/15 backdrop-blur-xl sm:p-8">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
               aria-label={t.closeModal}
-              className="absolute top-4 right-4 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#2c1d14]/15 bg-[#e6ddc7]/80 text-[#2c1d14] transition hover:bg-[#d86a34] hover:text-[#f0e9d7] active:scale-95"
+              className="absolute top-5 right-5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#2c1d14]/15 bg-[#e6ddc7]/80 text-[#2c1d14] transition hover:bg-[#d86a34] hover:text-[#f0e9d7] active:scale-95"
             >
               <X className="h-4 w-4" />
             </button>
 
             <div className="pr-10">
-              <div className="mb-1.5 inline-flex items-center gap-1.5 font-mono text-[10px] font-bold tracking-widest uppercase text-[#b85222]">
-                <Sparkles className="h-3 w-3" />
-                <span>{t.perkTag}</span>
-              </div>
               <h2
                 id="peek-modal-title"
-                className="font-display text-2xl font-bold tracking-tight text-[#2c1d14]"
+                className="font-display text-2xl font-bold tracking-tight text-[#2c1d14] sm:text-[28px]"
               >
                 {t.modalTitle}
               </h2>
-              <p className="mt-1 text-xs leading-relaxed text-[#2c1d14]/75 sm:text-sm">
+              <p className="mt-1.5 text-sm leading-relaxed text-[#2c1d14]/75">
                 {t.modalSubtitle}
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} noValidate className="mt-5 space-y-4">
+            <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-5">
               <div>
                 <label
                   htmlFor="peek-name"
-                  className="mb-1.5 block font-mono text-xs font-bold tracking-wider uppercase text-[#2c1d14]/75"
+                  className="block text-xs font-semibold text-[#2c1d14]/70"
                 >
-                  {t.nameLabel} *
+                  {t.nameLabel}
                 </label>
                 <input
                   ref={nameInputRef}
@@ -259,126 +248,91 @@ export default function LostTrailGate() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={t.namePlaceholder}
-                  className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f7f2e4]/90 px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
+                  className="mt-1 w-full border-b-2 border-[#2c1d14]/20 bg-transparent px-0.5 py-2 text-base text-[#2c1d14] placeholder:text-[#2c1d14]/35 focus:border-[#d86a34] focus:outline-none select-text"
                 />
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="peek-email"
-                    className="mb-1.5 block font-mono text-xs font-bold tracking-wider uppercase text-[#2c1d14]/75"
-                  >
-                    {t.emailLabel} *
-                  </label>
-                  <input
-                    id="peek-email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t.emailPlaceholder}
-                    className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f7f2e4]/90 px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="peek-phone"
-                    className="mb-1.5 block font-mono text-xs font-bold tracking-wider uppercase text-[#2c1d14]/75"
-                  >
-                    {t.phoneLabel} *
-                  </label>
-                  <input
-                    id="peek-phone"
-                    type="tel"
-                    required
-                    autoComplete="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder={t.phonePlaceholder}
-                    className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f7f2e4]/90 px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
-                  />
-                </div>
               </div>
 
               <div>
-                <span className="mb-2 block font-mono text-xs font-bold tracking-wider uppercase text-[#2c1d14]/75">
-                  {t.planLabel}
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  {t.planOptions.map((option) => {
-                    const active = (plan || t.planOptions[0]) === option;
-                    return (
-                      <button
-                        key={option}
-                        type="button"
-                        onClick={() => setPlan(option)}
-                        aria-pressed={active}
-                        className={`cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                          active
-                            ? "border-[#d86a34] bg-[#d86a34] text-[#f0e9d7] shadow-xs"
-                            : "border-[#2c1d14]/15 bg-[#f7f2e4]/80 text-[#2c1d14]/80 hover:border-[#d86a34]/50"
-                        }`}
-                      >
-                        {option}
-                      </button>
-                    );
-                  })}
-                </div>
+                <label
+                  htmlFor="peek-email"
+                  className="block text-xs font-semibold text-[#2c1d14]/70"
+                >
+                  {t.emailLabel}
+                </label>
+                <input
+                  id="peek-email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t.emailPlaceholder}
+                  className="mt-1 w-full border-b-2 border-[#2c1d14]/20 bg-transparent px-0.5 py-2 text-base text-[#2c1d14] placeholder:text-[#2c1d14]/35 focus:border-[#d86a34] focus:outline-none select-text"
+                />
               </div>
 
-              <label className="flex cursor-pointer items-start gap-2.5 rounded-xl border border-[#2c1d14]/12 bg-[#e6ddc7]/70 px-3.5 py-2.5 text-xs leading-snug text-[#2c1d14]/85">
-                <input
-                  type="checkbox"
-                  checked={offersOptIn}
-                  onChange={(e) => setOffersOptIn(e.target.checked)}
-                  className="sr-only"
-                />
-                <span
-                  aria-hidden
-                  className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border transition ${
-                    offersOptIn
-                      ? "border-[#d86a34] bg-[#d86a34] text-[#f0e9d7]"
-                      : "border-[#2c1d14]/35 bg-[#f0e9d7]"
-                  }`}
+              <div>
+                <label
+                  htmlFor="peek-phone"
+                  className="block text-xs font-semibold text-[#2c1d14]/70"
                 >
-                  {offersOptIn && <Check className="h-3 w-3 stroke-[3]" />}
-                </span>
-                <span>{t.offersOptIn}</span>
-              </label>
+                  {t.phoneLabel}
+                </label>
+                <input
+                  id="peek-phone"
+                  type="tel"
+                  required
+                  autoComplete="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder={t.phonePlaceholder}
+                  className="mt-1 w-full border-b-2 border-[#2c1d14]/20 bg-transparent px-0.5 py-2 text-base text-[#2c1d14] placeholder:text-[#2c1d14]/35 focus:border-[#d86a34] focus:outline-none select-text"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="peek-note"
+                  className="block text-xs font-semibold text-[#2c1d14]/70"
+                >
+                  {t.noteLabel}
+                </label>
+                <input
+                  id="peek-note"
+                  type="text"
+                  required
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder={t.notePlaceholder}
+                  className="mt-1 w-full border-b-2 border-[#2c1d14]/20 bg-transparent px-0.5 py-2 text-base text-[#2c1d14] placeholder:text-[#2c1d14]/35 focus:border-[#d86a34] focus:outline-none select-text"
+                />
+              </div>
 
               {error && (
                 <p
                   role="alert"
-                  className="rounded-xl border border-[#b85222]/40 bg-[#d86a34]/12 px-3.5 py-2 text-xs font-semibold text-[#b85222]"
+                  className="rounded-xl border border-[#b85222]/35 bg-[#d86a34]/12 px-3.5 py-2 text-xs font-semibold text-[#b85222]"
                 >
                   {error}
                 </p>
               )}
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="font-display flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#2c1d14] px-6 py-3.5 text-sm font-bold tracking-wide text-[#f0e9d7] shadow-md transition hover:bg-[#d86a34] active:scale-[0.99] disabled:opacity-60 sm:text-base"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>{t.submitting}</span>
-                  </>
-                ) : (
-                  <>
+              <div className="pt-1">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="font-display flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border-2 border-[#2c1d14] bg-[#2c1d14] px-6 py-3.5 text-base font-bold tracking-wide text-[#f0e9d7] shadow-[0_4px_0_#d86a34] transition-all hover:-translate-y-0.5 hover:border-[#b85222] hover:bg-[#b85222] hover:shadow-[0_6px_0_#2c1d14] active:translate-y-0.5 active:shadow-[0_1px_0_#d86a34] disabled:opacity-60"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>{t.submitting}</span>
+                    </>
+                  ) : (
                     <span>{t.submit}</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </>
-                )}
-              </button>
-
-              <p className="text-center text-[11px] text-[#2c1d14]/60">
-                {t.privacyNote}
-              </p>
+                  )}
+                </button>
+              </div>
             </form>
           </div>
         </div>

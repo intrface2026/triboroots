@@ -201,19 +201,16 @@ export interface GateCopy {
   modalTitle: string;
   modalSubtitle: string;
   closeModal: string;
-  perkTag: string;
   nameLabel: string;
   namePlaceholder: string;
   emailLabel: string;
   emailPlaceholder: string;
   phoneLabel: string;
   phonePlaceholder: string;
-  planLabel: string;
-  planOptions: string[];
-  offersOptIn: string;
+  noteLabel: string;
+  notePlaceholder: string;
   submit: string;
   submitting: string;
-  privacyNote: string;
   requiredError: string;
   emailError: string;
   serverError: string;
@@ -224,60 +221,44 @@ export const GATE_COPY: Record<Locale, GateCopy> = {
     headline: "We're lost on the trail — finding our way back.",
     handNote: "Want an early peek & secret hostel offers?",
     ctaButton: "lemme see 👀",
-    modalTitle: "Claim Your Sneak-Peek Pass",
+    modalTitle: "Who’s knocking?",
     modalSubtitle:
-      "Leave your details to preview the site right away — we might even send you early-bird hostel deals.",
+      "Leave your details below to peek at what we've built so far — we might even send some opening hostel offers your way.",
     closeModal: "Close form",
-    perkTag: "First-access hostel deals & launch invites",
-    nameLabel: "Full Name",
-    namePlaceholder: "Aarav Sharma",
-    emailLabel: "Email Address",
-    emailPlaceholder: "you@example.com",
+    nameLabel: "Name",
+    namePlaceholder: "Your full name",
+    emailLabel: "Email",
+    emailPlaceholder: "you@domain.com",
     phoneLabel: "Phone / WhatsApp",
     phonePlaceholder: "+91 98765 43210",
-    planLabel: "Trip Vibe",
-    planOptions: [
-      "Solo backpacker",
-      "Workation stay",
-      "Friends / Group trip",
-      "Just peeking around",
-    ],
-    offersOptIn: "Yes, send me early-bird TriboRoots hostel offers",
-    submit: "Unlock Website Peek",
-    submitting: "Unlocking your trail pass…",
-    privacyNote: "No spam — just early access & warm hostel offers.",
-    requiredError: "Please fill in your name, email, and phone number.",
-    emailError: "Please enter a valid email address.",
-    serverError: "Could not unlock right now. Please try again in a moment.",
+    noteLabel: "What brings you here?",
+    notePlaceholder: "Looking for a stay, planning a trip, or just curious",
+    submit: "Step inside →",
+    submitting: "Opening the door…",
+    requiredError: "Please fill in all fields before stepping inside.",
+    emailError: "That email doesn't look quite right.",
+    serverError: "Something slipped on the trail. Please try once more.",
   },
   hi: {
     headline: "हम अभी रास्ते पर हैं — बहुत जल्द लौटेंगे।",
     handNote: "क्या आप अंदर की शुरुआती झलक देखना चाहते हैं?",
     ctaButton: "ज़रा दिखाओ 👀",
-    modalTitle: "अपना स्नीक-पीक पास खोलें",
+    modalTitle: "अंदर आने से पहले",
     modalSubtitle:
-      "अपनी जानकारी दर्ज करें और तुरंत वेबसाइट देखें — साथ ही शुरुआती हॉस्टल ऑफ़र्स भी पाएँ।",
+      "अब तक बनी वेबसाइट देखने के लिए अपनी जानकारी भरें — हो सकता है हम आपको शुरुआती हॉस्टल ऑफ़र्स भी भेजें।",
     closeModal: "फ़ॉर्म बंद करें",
-    perkTag: "शुरुआती मेहमानों के लिए ख़ास हॉस्टल ऑफ़र्स",
-    nameLabel: "पूरा नाम",
-    namePlaceholder: "आरव शर्मा",
-    emailLabel: "ईमेल पता",
-    emailPlaceholder: "you@example.com",
+    nameLabel: "नाम",
+    namePlaceholder: "आपका पूरा नाम",
+    emailLabel: "ईमेल",
+    emailPlaceholder: "you@domain.com",
     phoneLabel: "फ़ोन / व्हाट्सऐप",
     phonePlaceholder: "+91 98765 43210",
-    planLabel: "यात्रा का मूड",
-    planOptions: [
-      "सोलो बैकपैकर",
-      "वर्कएशन स्टे",
-      "दोस्तों का ग्रुप",
-      "बस झलक देख रहा/रही हूँ",
-    ],
-    offersOptIn: "हाँ, मुझे ट्राइबरूट्स के शुरुआती हॉस्टल ऑफ़र्स भेजें",
-    submit: "वेबसाइट की झलक खोलें",
-    submitting: "आपका पास तैयार हो रहा है…",
-    privacyNote: "कोई स्पैम नहीं — सिर्फ़ शुरुआती झलक और ख़ास ऑफ़र्स।",
-    requiredError: "कृपया अपना नाम, ईमेल और फ़ोन नंबर भरें।",
-    emailError: "कृपया सही ईमेल पता दर्ज करें।",
-    serverError: "अभी अनलॉक नहीं हो सका। कृपया थोड़ी देर बाद पुनः प्रयास करें।",
+    noteLabel: "किस सिलसिले में आना हुआ?",
+    notePlaceholder: "सोलो ट्रिप, दोस्तों के साथ स्टे, या बस एक झलक",
+    submit: "अंदर आओ →",
+    submitting: "दरवाज़ा खुल रहा है…",
+    requiredError: "कृपया अंदर जाने से पहले सभी जानकारी भरें।",
+    emailError: "कृपया सही ईमेल पता लिखें।",
+    serverError: "कुछ गड़बड़ हो गई, कृपया एक बार फिर कोशिश करें।",
   },
 };
