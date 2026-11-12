@@ -199,6 +199,10 @@ export interface GateCopy {
   headline: string;
   handNote: string;
   description: string;
+  ctaButton: string;
+  modalTitle: string;
+  modalSubtitle: string;
+  closeModal: string;
   perkTag: string;
   nameLabel: string;
   namePlaceholder: string;
@@ -220,10 +224,15 @@ export interface GateCopy {
 export const GATE_COPY: Record<Locale, GateCopy> = {
   en: {
     badge: "UNDER CONSTRUCTION • OFF THE TRAIL",
-    headline: "This trail looks lost — we're finding our way back.",
-    handNote: "Pssst… want to take an early peek?",
+    headline: "We're lost on the trail — finding our way back.",
+    handNote: "Want an early peek & secret hostel offers?",
     description:
-      "TriboRoots Hostel is still pitching its tents, brewing the masala chai, and painting the murals. Drop your details below to unlock a live sneak peek at what we've built so far — plus we might just send over some founding-stay offers.",
+      "TriboRoots Hostel is still taking shape. Grab a sneak-peek pass to explore what we've built so far.",
+    ctaButton: "lemme see 👀",
+    modalTitle: "Claim Your Sneak-Peek Pass",
+    modalSubtitle:
+      "Leave your details to preview the site right away — we might even send you early-bird hostel deals.",
+    closeModal: "Close form",
     perkTag: "First-access hostel deals & launch invites",
     nameLabel: "Full Name",
     namePlaceholder: "Aarav Sharma",
@@ -249,9 +258,14 @@ export const GATE_COPY: Record<Locale, GateCopy> = {
   hi: {
     badge: "वेबसाइट निर्माणाधीन • राह ढूँढ रहे हैं",
     headline: "हम अभी रास्ते पर हैं — बहुत जल्द लौटेंगे।",
-    handNote: "अरे… अंदर की एक झलक देखना चाहते हैं?",
+    handNote: "क्या आप अंदर की शुरुआती झलक देखना चाहते हैं?",
     description:
-      "ट्राइबरूट्स हॉस्टल की दुनिया अभी सजाई जा रही है। अगर आप हमारी अब तक बनी वेबसाइट की शुरुआती झलक देखना चाहते हैं (और ख़ास ओपनिंग ऑफ़र्स पाना चाहते हैं), तो नीचे अपनी जानकारी दर्ज करें।",
+      "ट्राइबरूट्स हॉस्टल अभी आकार ले रहा है। अब तक बनी वेबसाइट देखने के लिए नीचे क्लिक करें।",
+    ctaButton: "ज़रा दिखाओ 👀",
+    modalTitle: "अपना स्नीक-पीक पास खोलें",
+    modalSubtitle:
+      "अपनी जानकारी दर्ज करें और तुरंत वेबसाइट देखें — साथ ही शुरुआती हॉस्टल ऑफ़र्स भी पाएँ।",
+    closeModal: "फ़ॉर्म बंद करें",
     perkTag: "शुरुआती मेहमानों के लिए ख़ास हॉस्टल ऑफ़र्स",
     nameLabel: "पूरा नाम",
     namePlaceholder: "आरव शर्मा",

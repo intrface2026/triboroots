@@ -1,11 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Compass, Sparkles, ArrowRight, Loader2, Check } from "lucide-react";
+import {
+  Compass,
+  Sparkles,
+  ArrowRight,
+  Loader2,
+  Check,
+  X,
+} from "lucide-react";
 import heroLogo from "@/assets/main-herosection-logo.png";
 import brandMark from "@/assets/favicon.png";
+import { WaterRippleImage } from "@/components/ui/water-ripple-image";
 import { GATE_COPY, type Locale } from "@/lib/i18n";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,6 +21,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export default function LostTrailGate() {
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("en");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -20,12 +29,26 @@ export default function LostTrailGate() {
   const [offersOptIn, setOffersOptIn] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   const t = GATE_COPY[locale];
 
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsModalOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    const id = requestAnimationFrame(() => nameInputRef.current?.focus());
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      cancelAnimationFrame(id);
+    };
+  }, [isModalOpen]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,70 +102,39 @@ export default function LostTrailGate() {
   };
 
   return (
-    <main className="relative min-h-dvh w-full overflow-x-hidden bg-[#f0e9d7] text-[#2c1d14] font-sans select-none">
-      {/* Subtle lightweight trail contour & warm glow backdrop */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 overflow-hidden"
-      >
-        <div className="absolute -top-28 -left-24 h-80 w-80 rounded-full bg-[#d86a34]/12 blur-3xl sm:h-[420px] sm:w-[420px]" />
-        <div className="absolute -right-24 -bottom-28 h-80 w-80 rounded-full bg-[#b85222]/10 blur-3xl sm:h-[420px] sm:w-[420px]" />
-        <svg
-          viewBox="0 0 1200 800"
-          preserveAspectRatio="xMidYMid slice"
-          className="h-full w-full opacity-25"
-        >
-          <path
-            d="M-60,640 C160,520 340,680 560,540 C780,400 940,560 1260,340"
-            fill="none"
-            stroke="#d86a34"
-            strokeWidth="2.2"
-            strokeDasharray="8 10"
-            strokeLinecap="round"
-          />
-          <path
-            d="M-80,220 C180,310 380,140 620,250 C860,360 1020,170 1280,210"
-            fill="none"
-            stroke="#2c1d14"
-            strokeWidth="1.2"
-            strokeDasharray="4 8"
-            opacity="0.35"
-          />
-          <circle
-            cx="560"
-            cy="540"
-            r="6"
-            fill="#d86a34"
-            opacity="0.7"
-          />
-        </svg>
+    <main className="relative flex min-h-dvh w-full flex-col overflow-hidden bg-[#f0e9d7] text-[#2c1d14] font-sans select-none">
+      {/* Live Subtle Water Ripple Canvas Background */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
+        <WaterRippleImage
+          src="/textures/tile-cream.png"
+          blueish={0.06}
+          scale={5}
+          illumination={0.22}
+          surfaceDistortion={0.045}
+          waterDistortion={0.025}
+          fullBleed
+          active
+          className="h-full w-full opacity-85"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f0e9d7]/35 via-transparent to-[#d86a34]/[0.07]" />
       </div>
 
-      {/* Top Navigation Strip */}
+      {/* Minimal Top Bar */}
       <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
-        <div className="flex items-center gap-3">
-          <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-[#d86a34] ring-2 ring-[#f0e9d7] shadow-md sm:h-12 sm:w-12 sm:rounded-2xl">
-            <Image
-              src={brandMark}
-              alt="TriboRoots backpack emblem"
-              fill
-              sizes="48px"
-              className="object-cover"
-            />
-          </div>
+        <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-[#d86a34] ring-2 ring-[#f0e9d7]/90 shadow-md sm:h-12 sm:w-12 sm:rounded-2xl">
           <Image
-            src={heroLogo}
-            alt="TriboRoots Hostel"
-            preload
-            className="h-8 w-auto object-contain sm:h-10"
+            src={brandMark}
+            alt="TriboRoots backpack emblem"
+            fill
+            sizes="48px"
+            className="object-cover"
           />
         </div>
 
-        {/* EN / HI Switch */}
         <div
           role="group"
           aria-label="Language switch"
-          className="flex h-8 items-center rounded-full border border-[#d86a34]/40 bg-[#f0e9d7]/90 p-0.5 shadow-xs backdrop-blur-sm sm:h-9"
+          className="flex h-8 items-center rounded-full border border-[#d86a34]/40 bg-[#f0e9d7]/85 p-0.5 shadow-xs backdrop-blur-sm sm:h-9"
         >
           <button
             type="button"
@@ -171,41 +163,79 @@ export default function LostTrailGate() {
         </div>
       </header>
 
-      {/* Main Split Content */}
-      <section className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-8 px-4 pt-2 pb-12 sm:px-6 md:grid-cols-12 md:gap-10 md:py-10 lg:py-14">
-        {/* Left: Story & Lost Trail Vibe */}
-        <div className="flex flex-col items-start gap-4 md:col-span-6 lg:col-span-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#d86a34]/35 bg-[#e6ddc7]/80 px-3.5 py-1.5 font-mono text-[11px] font-bold tracking-wider text-[#b85222] shadow-xs sm:text-xs">
-            <Compass className="h-3.5 w-3.5 animate-spin [animation-duration:10s]" />
-            <span>{t.badge}</span>
-          </div>
-
-          <h1 className="font-display text-3xl leading-[1.12] font-bold tracking-tight text-[#2c1d14] sm:text-4xl lg:text-5xl">
-            {t.headline}
-          </h1>
-
-          <p className="font-hand text-xl font-bold text-[#d86a34] sm:text-2xl">
-            {t.handNote}
-          </p>
-
-          <p className="max-w-xl text-sm leading-relaxed text-[#2c1d14]/80 sm:text-base">
-            {t.description}
-          </p>
-
-          <div className="mt-1 inline-flex items-center gap-2.5 rounded-2xl border border-[#2c1d14]/12 bg-[#e6ddc7]/70 px-4 py-2.5 text-xs font-semibold text-[#2c1d14] sm:text-sm">
-            <Sparkles className="h-4 w-4 shrink-0 text-[#d86a34]" />
-            <span>{t.perkTag}</span>
-          </div>
+      {/* Centered Minimal Front Stage */}
+      <section className="relative z-10 mx-auto flex flex-1 flex-col items-center justify-center px-5 pb-12 text-center sm:px-8">
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d86a34]/35 bg-[#f0e9d7]/80 px-3.5 py-1.5 font-mono text-[11px] font-bold tracking-wider text-[#b85222] shadow-xs backdrop-blur-sm sm:text-xs">
+          <Compass className="h-3.5 w-3.5 animate-spin [animation-duration:12s]" />
+          <span>{t.badge}</span>
         </div>
 
-        {/* Right: Sneak-Peek Access Pass Form */}
-        <div className="md:col-span-6 lg:col-span-6">
-          <form
-            onSubmit={handleSubmit}
-            noValidate
-            className="relative rounded-3xl border border-[#2c1d14]/15 bg-[#f7f2e4]/90 p-5 shadow-[0_24px_60px_-15px_rgba(44,29,20,0.22)] backdrop-blur-md sm:p-7"
-          >
-            <div className="space-y-4">
+        <Image
+          src={heroLogo}
+          alt="TriboRoots Hostel"
+          preload
+          className="mb-5 h-auto w-[min(68vw,250px)] object-contain drop-shadow-[0_6px_14px_rgba(44,29,20,0.1)] sm:w-[min(48vw,320px)]"
+        />
+
+        <h1 className="max-w-xl font-display text-2xl leading-[1.15] font-bold tracking-tight text-[#2c1d14] sm:text-4xl">
+          {t.headline}
+        </h1>
+
+        <p className="mt-3 max-w-md text-sm leading-relaxed text-[#2c1d14]/75 sm:text-base">
+          {t.description}
+        </p>
+
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="font-display mt-7 inline-flex cursor-pointer items-center gap-2.5 rounded-full bg-[#2c1d14] px-8 py-4 text-base font-bold tracking-wide text-[#f0e9d7] shadow-[0_16px_34px_-10px_rgba(44,29,20,0.45)] transition-all hover:-translate-y-0.5 hover:bg-[#d86a34] active:scale-95 sm:text-lg"
+        >
+          <span>{t.ctaButton}</span>
+        </button>
+
+        <p className="mt-4 font-hand text-lg font-semibold text-[#b85222]/90">
+          {t.handNote}
+        </p>
+      </section>
+
+      {/* Floating Glass Modal Form over Live Water-Ripple Background */}
+      {isModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="peek-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#2c1d14]/35 p-3.5 backdrop-blur-xs sm:p-6"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsModalOpen(false);
+          }}
+        >
+          <div className="relative max-h-[90dvh] w-full max-w-lg overflow-y-auto rounded-3xl border border-[#f0e9d7]/75 bg-[#f0e9d7]/85 p-5 text-[#2c1d14] shadow-[0_32px_70px_-14px_rgba(44,29,20,0.42)] ring-1 ring-[#2c1d14]/12 backdrop-blur-xl sm:p-7">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              aria-label={t.closeModal}
+              className="absolute top-4 right-4 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#2c1d14]/15 bg-[#e6ddc7]/80 text-[#2c1d14] transition hover:bg-[#d86a34] hover:text-[#f0e9d7] active:scale-95"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            <div className="pr-10">
+              <div className="mb-1.5 inline-flex items-center gap-1.5 font-mono text-[10px] font-bold tracking-widest uppercase text-[#b85222]">
+                <Sparkles className="h-3 w-3" />
+                <span>{t.perkTag}</span>
+              </div>
+              <h2
+                id="peek-modal-title"
+                className="font-display text-2xl font-bold tracking-tight text-[#2c1d14]"
+              >
+                {t.modalTitle}
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-[#2c1d14]/75 sm:text-sm">
+                {t.modalSubtitle}
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} noValidate className="mt-5 space-y-4">
               <div>
                 <label
                   htmlFor="peek-name"
@@ -214,6 +244,7 @@ export default function LostTrailGate() {
                   {t.nameLabel} *
                 </label>
                 <input
+                  ref={nameInputRef}
                   id="peek-name"
                   type="text"
                   required
@@ -221,7 +252,7 @@ export default function LostTrailGate() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={t.namePlaceholder}
-                  className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f0e9d7] px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
+                  className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f7f2e4]/90 px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
                 />
               </div>
 
@@ -241,7 +272,7 @@ export default function LostTrailGate() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t.emailPlaceholder}
-                    className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f0e9d7] px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
+                    className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f7f2e4]/90 px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
                   />
                 </div>
 
@@ -260,7 +291,7 @@ export default function LostTrailGate() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder={t.phonePlaceholder}
-                    className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f0e9d7] px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
+                    className="w-full rounded-xl border border-[#2c1d14]/20 bg-[#f7f2e4]/90 px-3.5 py-2.5 text-sm text-[#2c1d14] placeholder:text-[#2c1d14]/40 focus:border-[#d86a34] focus:ring-2 focus:ring-[#d86a34]/25 focus:outline-none select-text"
                   />
                 </div>
               </div>
@@ -281,7 +312,7 @@ export default function LostTrailGate() {
                         className={`cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                           active
                             ? "border-[#d86a34] bg-[#d86a34] text-[#f0e9d7] shadow-xs"
-                            : "border-[#2c1d14]/15 bg-[#f0e9d7] text-[#2c1d14]/80 hover:border-[#d86a34]/50"
+                            : "border-[#2c1d14]/15 bg-[#f7f2e4]/80 text-[#2c1d14]/80 hover:border-[#d86a34]/50"
                         }`}
                       >
                         {option}
@@ -291,7 +322,7 @@ export default function LostTrailGate() {
                 </div>
               </div>
 
-              <label className="flex cursor-pointer items-start gap-2.5 rounded-xl border border-[#2c1d14]/10 bg-[#e6ddc7]/60 px-3.5 py-2.5 text-xs leading-snug text-[#2c1d14]/85">
+              <label className="flex cursor-pointer items-start gap-2.5 rounded-xl border border-[#2c1d14]/12 bg-[#e6ddc7]/70 px-3.5 py-2.5 text-xs leading-snug text-[#2c1d14]/85">
                 <input
                   type="checkbox"
                   checked={offersOptIn}
@@ -341,11 +372,10 @@ export default function LostTrailGate() {
               <p className="text-center text-[11px] text-[#2c1d14]/60">
                 {t.privacyNote}
               </p>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </section>
+      )}
     </main>
   );
 }
-
